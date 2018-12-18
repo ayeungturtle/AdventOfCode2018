@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace AdventOfCode2018
 {
@@ -8,7 +9,7 @@ namespace AdventOfCode2018
     {
         public static void Main(string[] args)
         {
-            Console.WriteLine(OneB());
+            Console.WriteLine(GenerateCheckSum());
         }
 
         // Each line in the input file contains a + or - operator and an integer.
@@ -51,6 +52,53 @@ namespace AdventOfCode2018
                 else
                     frequencies.Add(total);
             };
+        }
+
+        // Calculate a "checksum" for a text file that
+        // 1) counts the number of lines that contain exactly 2 of the same character (could also contain multiple pairs)
+        // 2) counts the nubmer of lines that contain exactly 3 of the same character (could also contain multiple trios)
+        // 3) multiples these two counts to produce the final checksum'
+        private static int GenerateCheckSum()
+        {
+            StreamReader stream = new StreamReader("inputTwoA.txt");
+            string line;
+            int pairCount = 0;
+            int trioCount = 0;
+            bool hasPair;
+            bool hasTrio;
+            int repeatCount;
+            char curChar;
+
+            while ((line = stream.ReadLine()) != null)
+            {
+                hasPair = false;
+                hasTrio = false;
+                repeatCount = 1;
+                line = String.Concat(line.OrderBy(c => c));
+                curChar = line[0];
+
+                for (int i = 1; i < line.Length; i++)
+                {
+                    if (line[i] == curChar)
+                        repeatCount++;
+                    if (line[i] != curChar || i == line.Length - 1)
+                    {
+                        if (repeatCount == 3)
+                            hasTrio = true;
+                        else if (repeatCount == 2)
+                            hasPair = true;
+                        repeatCount = 1;
+                        curChar = line[i];
+                    }
+                }
+
+                if (hasPair)
+                    pairCount++;
+                if (hasTrio)
+                    trioCount++;
+
+            }
+            return pairCount * trioCount;
         }
     }
 }
