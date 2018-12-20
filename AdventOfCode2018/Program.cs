@@ -9,7 +9,7 @@ namespace AdventOfCode2018
     {
         public static void Main(string[] args)
         {
-            Console.WriteLine(GenerateCheckSum());
+            Console.WriteLine(DiffByOne());
         }
 
         // Each line in the input file contains a + or - operator and an integer.
@@ -54,6 +54,7 @@ namespace AdventOfCode2018
             };
         }
 
+        // 2A
         // Calculate a "checksum" for a text file that
         // 1) counts the number of lines that contain exactly 2 of the same character (could also contain multiple pairs)
         // 2) counts the nubmer of lines that contain exactly 3 of the same character (could also contain multiple trios)
@@ -99,6 +100,52 @@ namespace AdventOfCode2018
 
             }
             return pairCount * trioCount;
+        }
+
+        // 2B
+        // Find two lines in the file that only differ by one character at the same string position.
+        // Return the string with that differing character removed.
+        // This solution is crude and innefficient.  Look into others.
+        private static string DiffByOne()
+        {
+            string[] lines = File.ReadAllLines("inputTwoA.txt");
+            string iLine;
+            string jLine;
+            int discrepancies;
+
+            for (int i = 0; i < lines.Length - 1; i++)
+            {
+                for (int j = i + 1; j < lines.Length; j++)
+                {
+                    discrepancies = 0;
+                    iLine = lines[i];
+                    jLine = lines[j];
+
+                    if (iLine.Length != jLine.Length)
+                        continue;
+
+                    for (int k = 0; k < iLine.Length; k++)
+                    {
+                        if (iLine[k] != jLine[k])
+                            discrepancies++;
+                    }
+
+                    if (discrepancies == 1)
+                    {
+                        for (int k = 0; k < iLine.Length; k++)
+                        {
+                            if (iLine[k] != jLine[k])
+                            {
+                                iLine = iLine.Remove(k, 1);
+                                break;
+                            }
+                        }
+
+                        return iLine;
+                    }
+                }
+            }
+            return "not found";
         }
     }
 }
