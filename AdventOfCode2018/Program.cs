@@ -12,6 +12,8 @@ namespace AdventOfCode2018
             Console.WriteLine(ThreeA());
         }
 
+        // 1A
+        // https://adventofcode.com/2018/day/1
         // Each line in the input file contains a + or - operator and an integer.
         // Example lines:  +1, -2, +3, +1
         // Find the output after all operators have been run in line order.
