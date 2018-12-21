@@ -102,6 +102,7 @@ namespace AdventOfCode2018
             return pairCount * trioCount;
         }
 
+        // https://adventofcode.com/2018/day/2
         // 2B
         // Find two lines in the file that only differ by one character at the same string position.
         // Return the string with that differing character removed.
