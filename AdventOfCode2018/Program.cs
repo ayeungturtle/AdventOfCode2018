@@ -9,7 +9,7 @@ namespace AdventOfCode2018
     {
         public static void Main(string[] args)
         {
-            Console.WriteLine(DiffByOne());
+            Console.WriteLine(ThreeA());
         }
 
         // Each line in the input file contains a + or - operator and an integer.
@@ -146,6 +146,62 @@ namespace AdventOfCode2018
                 }
             }
             return "not found";
+        }
+
+        // 3A
+        // https://adventofcode.com/2018/day/3
+        // A line like #123 @ 3,2: 5x4 means that claim ID 123 specifies a rectangle 3 inches
+        // from the left edge, 2 inches from the top edge, 5 inches wide, and 4 inches tall.
+        // In a 1,000 by 1,000 grid, given the input data, find the total number of square inches
+        // where there is overlap.
+        private static int ThreeA()
+        {
+            string[] lines = File.ReadAllLines("input3.txt");
+            bool[,] grid = new bool[1000, 1000];
+            bool[,] duplicateGrid = new bool[1000, 1000];
+            int duplicateCount = 0;
+            int iStart;
+            int jStart;
+            int width;
+            int height;
+            int atLocation;
+            int commaLocation;
+            int colonLocation;
+            int xLocation;
+
+            foreach (string line in lines)
+            {
+                atLocation = line.IndexOf('@');
+                commaLocation = line.IndexOf(',');
+                colonLocation = line.IndexOf(':');
+                xLocation = line.IndexOf('x');
+                iStart = int.Parse(line.Substring(atLocation + 2, commaLocation - atLocation - 2));
+                jStart = int.Parse(line.Substring(commaLocation + 1, colonLocation - commaLocation - 1));
+                width = int.Parse(line.Substring(colonLocation + 2, xLocation - colonLocation - 2));
+                height = int.Parse(line.Substring(xLocation + 1));
+
+                for (int i = iStart; i < iStart + width; i++)
+                {
+                    for (int j = jStart; j < jStart + height; j++)
+                    {
+                        // If that coordinate has already been used...
+                        if (grid[i,j])
+                        {
+                            // If that coordinate hasn't been accounted for as a duplicate...
+                            if (duplicateGrid[i,j] == false)
+                            {
+                                duplicateCount++;
+                                duplicateGrid[i, j] = true;
+                            }
+                        }
+                        else
+                        {
+                            grid[i, j] = true;
+                        }
+                    }
+                }
+            }
+            return duplicateCount;
         }
     }
 }
